@@ -1,5 +1,7 @@
 package com.example.worldskills.tsppsp;
 
+import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -10,10 +12,15 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
 
-        //musse
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-        //henry
+                Intent inicio = new Intent(SplashActivity.this,MenuActivity.class);
+                startActivity(inicio);
+                finish();
 
-        //ydudgh
+            }
+        }, 2000);
     }
 }
