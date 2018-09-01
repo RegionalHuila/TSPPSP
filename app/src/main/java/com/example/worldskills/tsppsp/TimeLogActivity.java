@@ -8,14 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
+
 
 public class TimeLogActivity extends AppCompatActivity {
 
@@ -24,8 +20,6 @@ public class TimeLogActivity extends AppCompatActivity {
     Spinner spFase;
     TextView tvHoraDelta;
     SimpleDateFormat formato = new SimpleDateFormat();
-    String minutosInicial ;
-    String minutosFinal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
