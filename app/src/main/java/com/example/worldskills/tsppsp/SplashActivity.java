@@ -19,6 +19,7 @@ public class SplashActivity extends AppCompatActivity {
                 Intent inicio = new Intent(SplashActivity.this, MenuActivity.class);
                 startActivity(inicio);
                 finish();
+                //https://developer.android.com/reference/java/time/format/DateTimeFormatter
 
             }
         }, 2000);
