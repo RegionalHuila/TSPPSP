@@ -12,9 +12,9 @@ public class AyudaBaseDatos extends SQLiteOpenHelper {
     private static final String CREAR_TABLA =
             "CREATE TABLE " + TablaDatos.LectorEntrada.TABLA_NOMBRE + " (" +
                     TablaDatos.LectorEntrada._ID + " INTEGER PRIMARY KEY," +
-                    TablaDatos.LectorEntrada.COLUMNa_NOMBREPROYECTO + " TEXT," +
-                    TablaDatos.LectorEntrada.COLUMNA_START + " DATE," +
-                    TablaDatos.LectorEntrada.COLUMNa_INTERRUPCIONES + " )";
+                    TablaDatos.LectorEntrada.COLUMNa_NOMBREPROYECTO + " TEXT)";
+                   // TablaDatos.LectorEntrada.COLUMNA_START + " DATE," +
+                    //TablaDatos.LectorEntrada.COLUMNa_INTERRUPCIONES + " )";
 
     private static final String ELIMINAR_TABLA =
             "DROP TABLE IF EXISTS " + TablaDatos.LectorEntrada.TABLA_NOMBRE;

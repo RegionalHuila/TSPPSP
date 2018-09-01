@@ -2,9 +2,11 @@ package com.example.worldskills.tsppsp;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,15 +68,48 @@ public class MenuActivity extends AppCompatActivity
         etNombreProyecto = (EditText)findViewById(R.id.etNombreProyecto);
         btnCrearProyecto = (Button) findViewById(R.id.btnCrearProyecto);
         lvMenuListaProyecto = (ListView)findViewById(R.id.lvProyectosMenu);
+        actualizarProyecto();
 
         btnCrearProyecto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                crearProyecto();
+
+
+                if (!TextUtils.isEmpty(etNombreProyecto.getText().toString().trim())){
+                    AyudaBaseDatos baseDatos = new AyudaBaseDatos(getApplicationContext());
+                    SQLiteDatabase bd = baseDatos.getWritableDatabase();
+                    ContentValues valores = new ContentValues();
+
+                    String nombre= etNombreProyecto.getText().toString();
+                    valores.put(TablaDatos.LectorEntrada.COLUMNa_NOMBREPROYECTO,nombre);
+                    long nuevoProyecto = bd.insert(TablaDatos.LectorEntrada.TABLA_NOMBRE, null, valores);
+                }else{
+                    Toast.makeText(getApplicationContext(),"Ingrese un nombre para el proyecto",Toast.LENGTH_LONG).show();
+                }
+
+                actualizarProyecto();
+            }
+
+        });
+
+        lvMenuListaProyecto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+              // String menu = (String) lvMenuListaProyecto.get
+                String idMenu;
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+
+            //    editor.putInt("IDPROYECTO",menu);
+              //  editor.commit();
+
+            //Toast.makeText(getApplicationContext(),""+menu,Toast.LENGTH_LONG).show();
+
             }
         });
 
-        actualizarProyecto();
+
 
 
 
@@ -98,32 +134,12 @@ public class MenuActivity extends AppCompatActivity
               Log.i("Lista: ",proyecto);
           }while (consulta.moveToNext());
 
-          adapter = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_expandable_list_item_1,listaProyectos);
+          adapter = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,listaProyectos);
           lvMenuListaProyecto.setAdapter(adapter);
           consulta.close();
       }
+      return;
 
-
-    }
-
-    private void crearProyecto() {
-        AyudaBaseDatos baseDatos = new AyudaBaseDatos(getApplicationContext());
-        SQLiteDatabase bd = baseDatos.getWritableDatabase();
-        ContentValues valores = new ContentValues();
-        String nombre = "";
-        validarTextoMenu(nombre);
-        valores.put(TablaDatos.LectorEntrada.COLUMNa_NOMBREPROYECTO,nombre);
-        long nuevoProyecto = bd.insert(TablaDatos.LectorEntrada.TABLA_NOMBRE, null, valores);
-    }
-
-    //este metodo sirve para validar el campo de texto de nombre proyecto
-    private void validarTextoMenu(String nombreProyecto) {
-        etNombreProyecto = (EditText)findViewById(R.id.etNombreProyecto);
-        if (!TextUtils.isEmpty(etNombreProyecto.getText().toString().trim())){
-             nombreProyecto = etNombreProyecto.getText().toString();
-        }else{
-            Toast.makeText(this,"Ingrese un nombre para el proyecto",Toast.LENGTH_LONG).show();
-        }
 
     }
 
