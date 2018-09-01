@@ -49,7 +49,7 @@ public class TimeLogActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
+//obtenemos la fecha de inicio
                 Calendar fecha = Calendar.getInstance();
                 Date hora = fecha.getTime();
                 formato = new SimpleDateFormat("h:mm");
@@ -62,7 +62,7 @@ public class TimeLogActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
+//obenemos la fehca final
                 Calendar fecha = Calendar.getInstance();
                 Date hora = fecha.getTime();
                 formato = new SimpleDateFormat(" h:mm");
