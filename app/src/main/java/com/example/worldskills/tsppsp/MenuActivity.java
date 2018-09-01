@@ -54,7 +54,7 @@ public class MenuActivity extends AppCompatActivity
 
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -68,18 +68,19 @@ public class MenuActivity extends AppCompatActivity
         etNombreProyecto = (EditText)findViewById(R.id.etNombreProyecto);
         btnCrearProyecto = (Button) findViewById(R.id.btnCrearProyecto);
         lvMenuListaProyecto = (ListView)findViewById(R.id.lvProyectosMenu);
+        //este metodo actualiza la lista una vez se abra la vista
         actualizarProyecto();
 
         btnCrearProyecto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
+                //validamos el campo de texto
                 if (!TextUtils.isEmpty(etNombreProyecto.getText().toString().trim())){
                     AyudaBaseDatos baseDatos = new AyudaBaseDatos(getApplicationContext());
                     SQLiteDatabase bd = baseDatos.getWritableDatabase();
                     ContentValues valores = new ContentValues();
-
+                    //enviamos el nombre del poryecto a la base de datos
                     String nombre= etNombreProyecto.getText().toString();
                     valores.put(TablaDatos.LectorEntrada.COLUMNa_NOMBREPROYECTO,nombre);
                     long nuevoProyecto = bd.insert(TablaDatos.LectorEntrada.TABLA_NOMBRE, null, valores);
@@ -91,20 +92,20 @@ public class MenuActivity extends AppCompatActivity
             }
 
         });
-
+//Se selleciona el objeto de la lista
         lvMenuListaProyecto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-              // String menu = (String) lvMenuListaProyecto.get
-                String idMenu;
+        long menu = lvMenuListaProyecto.getSelectedItemPosition();
+
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor editor = preferences.edit();
 
-            //    editor.putInt("IDPROYECTO",menu);
-              //  editor.commit();
+            editor.commit();
 
             //Toast.makeText(getApplicationContext(),""+menu,Toast.LENGTH_LONG).show();
+                drawer.openDrawer(GravityCompat.START);
 
             }
         });
@@ -116,7 +117,7 @@ public class MenuActivity extends AppCompatActivity
 
 
     }
-
+//metodo para acualizar la lista en la cual se crean consulta para luego imprimir en el listview
     private void actualizarProyecto() {
         AyudaBaseDatos baseDatos = new AyudaBaseDatos(getApplicationContext());
         SQLiteDatabase bd = baseDatos.getReadableDatabase();
