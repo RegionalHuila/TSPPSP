@@ -1,9 +1,15 @@
 package com.example.worldskills.tsppsp;
 
-import android.content.Intent;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.view.menu.ListMenuItemView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +19,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.worldskills.tsppsp.bd.AyudaBaseDatos;
+import com.example.worldskills.tsppsp.bd.TablaDatos;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    List listaProyectos;
+    ListView lvMenuListaProyecto;
+    Button btnCrearProyecto;
+    EditText etNombreProyecto;
+    Cursor consulta;
+    ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +48,7 @@ public class MenuActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -41,6 +58,72 @@ public class MenuActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        //comienza menu proyecto
+        etNombreProyecto = (EditText)findViewById(R.id.etNombreProyecto);
+        btnCrearProyecto = (Button) findViewById(R.id.btnCrearProyecto);
+        lvMenuListaProyecto = (ListView)findViewById(R.id.lvProyectosMenu);
+
+        btnCrearProyecto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                crearProyecto();
+            }
+        });
+
+        actualizarProyecto();
+
+
+
+
+
+    }
+
+    private void actualizarProyecto() {
+        AyudaBaseDatos baseDatos = new AyudaBaseDatos(getApplicationContext());
+        SQLiteDatabase bd = baseDatos.getReadableDatabase();
+        ContentValues valores = new ContentValues();
+        listaProyectos = new ArrayList<String>();
+
+
+      String consultarSQL = "SELECT * FROM proyectos";
+      consulta = bd.rawQuery(consultarSQL,null);
+      if (consulta.moveToFirst()){
+          do {
+              String proyecto = consulta.getString(0)+": "+
+                      consulta.getString(1);
+              listaProyectos.add(proyecto);
+              Log.i("Lista: ",proyecto);
+          }while (consulta.moveToNext());
+
+          adapter = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_expandable_list_item_1,listaProyectos);
+          lvMenuListaProyecto.setAdapter(adapter);
+          consulta.close();
+      }
+
+
+    }
+
+    private void crearProyecto() {
+        AyudaBaseDatos baseDatos = new AyudaBaseDatos(getApplicationContext());
+        SQLiteDatabase bd = baseDatos.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        String nombre = "";
+        validarTextoMenu(nombre);
+        valores.put(TablaDatos.LectorEntrada.COLUMNa_NOMBREPROYECTO,nombre);
+        long nuevoProyecto = bd.insert(TablaDatos.LectorEntrada.TABLA_NOMBRE, null, valores);
+    }
+
+    //este metodo sirve para validar el campo de texto de nombre proyecto
+    private void validarTextoMenu(String nombreProyecto) {
+        etNombreProyecto = (EditText)findViewById(R.id.etNombreProyecto);
+        if (!TextUtils.isEmpty(etNombreProyecto.getText().toString().trim())){
+             nombreProyecto = etNombreProyecto.getText().toString();
+        }else{
+            Toast.makeText(this,"Ingrese un nombre para el proyecto",Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override
@@ -53,12 +136,7 @@ public class MenuActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -68,9 +146,7 @@ public class MenuActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -82,8 +158,7 @@ public class MenuActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_time_log) {
-            Intent timeLog = new Intent(MenuActivity.this,TimeLogActivity.class);
-            startActivity(timeLog);
+            // Handle the camera action
         } else if (id == R.id.nav_defect_log) {
 
         } else if (id == R.id.nav_proyect_plan_summary) {
