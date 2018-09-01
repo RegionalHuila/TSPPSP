@@ -13,6 +13,7 @@ import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -22,6 +23,9 @@ public class TimeLogActivity extends AppCompatActivity {
     Button btnInicio, btnFinal, btnRegistrar;
     Spinner spFase;
     TextView tvHoraDelta;
+    SimpleDateFormat formato = new SimpleDateFormat();
+    String minutosInicial ;
+    String minutosFinal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +43,32 @@ public class TimeLogActivity extends AppCompatActivity {
 
         ArrayAdapter<CharSequence> adaptador =  ArrayAdapter.createFromResource(this,R.array.Fases, android.R.layout.simple_list_item_1);
         spFase.setAdapter(adaptador);
+
+
         btnInicio.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-               SimpleDateFormat formato = new SimpleDateFormat("yyyy MM d");
+
+                Calendar fecha = Calendar.getInstance();
+                Date hora = fecha.getTime();
+                formato = new SimpleDateFormat("h:mm");
+                etHoraInicio.setText(""+formato.format(hora));
+                etHoraInicio.setEnabled(true);
+
+            }
+        });
+        btnFinal.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Calendar fecha = Calendar.getInstance();
+                Date hora = fecha.getTime();
+                formato = new SimpleDateFormat(" h:mm");
+                etHoraFinal.setText(""+formato.format(hora));
+                etHoraFinal.setEnabled(true);
+
 
 
 
@@ -53,6 +78,7 @@ public class TimeLogActivity extends AppCompatActivity {
 
 
 
-
     }
+
+
 }
