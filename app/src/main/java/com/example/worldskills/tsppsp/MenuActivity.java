@@ -1,6 +1,7 @@
 package com.example.worldskills.tsppsp;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -158,7 +159,8 @@ public class MenuActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_time_log) {
-            // Handle the camera action
+            Intent timeLog = new Intent(MenuActivity.this,TimeLogActivity.class);
+            startActivity(timeLog);
         } else if (id == R.id.nav_defect_log) {
 
         } else if (id == R.id.nav_proyect_plan_summary) {

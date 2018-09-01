@@ -42,7 +42,7 @@ public class TimeLogActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SimpleDateFormat formato = new SimpleDateFormat();
-                formato.
+
             }
         });
 
