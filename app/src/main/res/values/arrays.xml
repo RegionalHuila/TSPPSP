@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Fases">
+    <item name="plan">PLAN</item>
+    <item name="dld">DLD</item>
+    <item name="code">CODE</item>
+    <item name="compile">COMPILE</item>
+    <item name="ut">UT</item>
+    <item name="pm">PM</item>
+    </string-array>
+
+</resources>
